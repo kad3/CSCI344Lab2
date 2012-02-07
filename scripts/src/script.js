@@ -2,18 +2,14 @@
  * This is the entry point for our JavaScript program
  */
 function main() {
-    //your code goes here
-
-
-    //your tasks
 
     //1. Create a spotter and get it to insert tweets into the DOM
   //var s = new Spotter("twitter.search",{q:"terrorism", lang:"en"});
   var s = new Spotter("twitter.search",
-                      {q:"terrorism", lang:"en", period:120},
+                      {q:"wilkos", lang:"en", period:120},
                       {buffer:true,bufferTimeout:1000});
-  var tweets = new Array();
   var count = 0;
+  var removeCount = 0;
   var color = 0;
 
   s.register(function(tweets) {
@@ -27,24 +23,22 @@ function main() {
       var style = "tweet1";
     }
     var tweet = $("<p id='"+count+"' class='"+style+"'><img src='"+img+"'/>"+txt+"</p>");
-    tweet.hide();
     //3. Make the tweets occur so the most recent are at the top
+    tweet.hide();
     $("#tweets").prepend(tweet);
     //4. Make the tweets slide down
     tweet.fadeIn().slideDown();
-    if(count>10){
-      var remove = count-10;
-      $("#"+remove).slideDown().fadeOut();
+    //6. Show a maximum of 10 tweets at a time (remove old tweets from the dom)
+    if(count>=10){
+      $("#"+removeCount).fadeOut();
+      $("#"+removeCount).remove();
+      removeCount++;
     }
     count++;
     color++;
   });
 
   s.start();
-
-    //6. Show a maximum of 10 tweets at a time (remove old tweets from the dom)
-
-
 }
 
 main();
